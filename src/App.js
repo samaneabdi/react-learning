@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import Child from "./Child";
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { Link, Outlet } from "react-router-dom";
 
 const fibn = (n) => {
   if (n == 1 || n == 0) return 1;
@@ -33,22 +34,20 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {show && <Child addCounter={addCounter} />}
-        {show && <Child addCounter={addCounter} />}
-
-        <button type="button" onClick={() => setCounter(counter + 1)}>
-          click
-        </button>
-        <button onClick={() => setShow(!show)}>clickShow</button>
-        <div>{date.toISOString()}</div>
-        <div>{counter}</div>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <div>{fib}</div>
+        <li>
+          <Link to="/Home">Home</Link>
+        </li>
+        <li>
+          <Link to="/About">About</Link>
+        </li>
+        <li>
+          <Link to="/Contact">Contact</Link>
+        </li>
       </header>
+      <main>
+        <Outlet />
+      </main>
+      <footer>footer</footer>
     </div>
   );
 }
