@@ -18,7 +18,7 @@ const Child = ({addCounter}) =>{
     return (
         <>
         <button onClick={()=>addCounter()}>counter</button>
-        <div>child</div>
+        <div>child new</div>
         <button onClick={()=>{
             ref.current += 1;
             console.log(ref.current)
