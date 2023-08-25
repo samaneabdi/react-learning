@@ -1,4 +1,3 @@
-import userEvent from "@testing-library/user-event";
 import { useEffect, useRef } from "react";
 import { memo } from "react";
 let global = 0;
