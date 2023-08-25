@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Child from "./Child";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -27,7 +26,6 @@ function App() {
     return () => {
       clearInterval(interval);
     };
-    console.log("parent is mount");
   }, []);
 
   return (
