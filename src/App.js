@@ -1,24 +1,49 @@
+import { useEffect, useState } from "react";
 import "./App.css";
-import { Link, Outlet } from "react-router-dom";
+import { fetchCats } from "./api/cats";
 
 function App() {
-  console.log("parent is rendering");
+  const [cats, setCats] = useState([]);
+  const [search, setSearch]= useState("");
 
+  useEffect(() => {
+    const getCats = async() =>{
+      const result = await fetchCats(search);
+      setCats(result);
+    }
+    getCats();
+  }, [search]);
+
+  if(!cats.length) {
+    return <p>Loading...</p>
+  }
   return (
     <div className="App">
       <header className="App-header">
-        <li>
-          <Link to="/Home">Home</Link>
-        </li>
-        <li>
-          <Link to="/About">About</Link>
-        </li>
-        <li>
-          <Link to="/Contact">Contact</Link>
-        </li>
+        <h1>List Of Cats</h1>
       </header>
       <main>
-        <Outlet />
+            <div className="row">
+              <div className="search">
+                <label htmlFor="search">Serach : </label>
+                <input
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  id="search"
+                />
+                <br />
+              </div>
+            </div>
+            <div className="row">
+              {cats.map((cat) => (
+                <div key={cat.name} className="column">
+                  <img key={cat.name} src={cat.image_link} alt="tt" />
+                  <div>{cat.name}</div>
+                </div>
+              ))}
+            </div>
+      
       </main>
       <footer>footer</footer>
     </div>
