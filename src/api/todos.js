@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 const apiKey = "Bearer c6669c72a45113aa347c235b8a49e3406011bcd1";
 const url = `https://api.todoist.com/rest/v2/tasks`;
 
+let tasks = [];
+
 const fetchTask = async () => {
   const response = await fetch(url, {
     method: "GET",
@@ -10,8 +12,9 @@ const fetchTask = async () => {
       Authorization: apiKey,
     },
   });
+  tasks = await response.json();
+  return tasks;
 
-  return await response.json();
 };
 
 const createTask = async (newTaskData) => {
@@ -25,7 +28,9 @@ const createTask = async (newTaskData) => {
     body: JSON.stringify(newTaskData),
   });
 
-  return await response.json();
+  let newTask = await response.json();
+  tasks = [...tasks, newTask];
+  return tasks;
 };
 
 const deleteTask = async (id) => {

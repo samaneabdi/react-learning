@@ -1,8 +1,9 @@
 import React,{useState} from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import "./todo.css";
 import { fetchTask, createTask, deleteTask } from '../../api/todos';
 import queryClient from '../../api/query-client';
+import useSWR from 'swr'
 import { v4 as uuidv4 } from "uuid";
 
 function Todos() {
@@ -11,37 +12,8 @@ function Todos() {
   const [newTaskName, setNewTaskName] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
-  const { data: tasks, isLoading, isError, error } = useQuery('tasks', fetchTask);
-
-  const createTaskMutation = useMutation(createTask, {
-    onMutate: async newTask =>{
-      await queryClient.cancelQueries('tasks');
-      const previouseTasks = queryClient.getQueriesData('tasks');
-      newTask.id = uuidv4();
-      queryClient.setQueriesData('tasks', old => [...old, newTask]);
-      setShowAddTask(false);
-      setNewTaskName('');
-      setNewTaskDescription('');
-      console.log("onmutate");
-      return {previouseTasks};
-    },
-    onError: (err, newTodo, context) => {
-      queryClient.setQueryData('tasks', context.previouseTasks);
-      setShowAddTask(true);
-      setNewTaskName(newTodo.content);
-      setNewTaskDescription(newTodo.description);
-    },
-    onSettled: ()=>{
-      queryClient.invalidateQueries('tasks');
-    },
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries('tasks');
-    //   setShowAddTask(false);
-    //   setNewTaskName('');
-    //   setNewTaskDescription('');
-    // },
-  });
-
+  const { data: tasks, isLoading, isError, error, mutate } = useSWR('tasks', fetchTask);
+  
   const deleteTaskMutation = useMutation(deleteTask, {
     onError: () => {
       queryClient.invalidateQueries('tasks');
@@ -58,10 +30,18 @@ function Todos() {
 
   const handleAddTask = () => {
     if (newTaskName.trim() !== '') {
-      createTaskMutation.mutate({
+      const newTask = {
         content: newTaskName,
         description: newTaskDescription,
-        is_completed: false })
+        is_completed: false,
+        id: uuidv4()
+      };
+      mutate(createTask(newTask), {
+        optimisticData: [...tasks, newTask],
+        rollbackOnError: true,
+        populateCache: true,
+        revalidate: false
+      });
     }
   };
 
