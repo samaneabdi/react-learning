@@ -2,9 +2,8 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 
-const About = React.lazy(() => import("../pages/About"));
-const Contact = React.lazy(() => import("../pages/Contact"));
-const Home = React.lazy(() => import("../pages/Home"));
+const Cats = React.lazy(() => import("../pages/cat/Cats"));
+const Todos = React.lazy(() => import("../pages/todo/Todos"));
 
 const router = createBrowserRouter([
   {
@@ -12,16 +11,12 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/Home",
-        element: <Home />,
+        path: "/Cats",
+        element: <Cats />,
       },
       {
-        path: "/About",
-        element: <About />,
-      },
-      {
-        path: "/Contact",
-        element: <Contact />,
+        path: "/Todos",
+        element: <Todos />,
       },
     ],
   },
