@@ -5,7 +5,7 @@ font-size: 12px;
 font-weight: 400;
 }
 
-.todo-form {
+.todo_form {
 display: flex;
 flex-direction: column;
 align-items: flex-start;
@@ -20,13 +20,13 @@ padding-bottom: 8px;
 border-bottom: 1px solid transparent;
 }
 
-.task-container {
+.task_container {
 display: flex;
 flex-direction: column;
 margin-top: 2rem;
 }
 
-.add-task-box {
+.add_task_box {
 width: 300px;
 border: 1px solid #ccc;
 padding: 1rem;
@@ -36,8 +36,8 @@ gap: 0.5rem;
 align-items: center;
 }
 
-.add-task-box input[type="text"],
-.add-task-box textarea {
+.add_task_box input[type="text"],
+.add_task_box textarea {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -59,12 +59,12 @@ align-items: center;
   margin-right: 1rem;
 }
 
-.task-name {
+.task_name {
   margin: 0;
   font-size: 14px;
 }
 
-.task-desc {
+.task_desc {
   color: #666;
   margin: 0;
   font-size: 12px;
@@ -85,20 +85,21 @@ button:hover {
   color: white;
 }
 
-.cancel-btn {
+.cancel_btn {
   background-color: #f5f5f5 !important;
   color: #444 !important;
 }
 
-.cancel-btn:hover {
+.cancel_btn:hover {
   background-color: #e5e5e5 !important;
   color: #444 !important;
 }
 
-.task-details {
+.task_details {
   flex-grow: 1; 
 }
 
-.remove-btn:hover {
+.remove_btn:hover {
   background-color: #dc4035 !important;
 }
+

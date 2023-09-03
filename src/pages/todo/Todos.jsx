@@ -1,8 +1,6 @@
 import React,{useState} from 'react'
-import { useMutation } from 'react-query'
-import "./todo.css";
+import todoStyle from './todo.module.css';
 import { fetchTask, createTask, deleteTask } from '../../api/todos';
-import queryClient from '../../api/query-client';
 import useSWR from 'swr'
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,12 +11,6 @@ function Todos() {
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
   const { data: tasks, isLoading, isError, error, mutate } = useSWR('tasks', fetchTask);
-  
-  const deleteTaskMutation = useMutation(deleteTask, {
-    onError: () => {
-      queryClient.invalidateQueries('tasks');
-    },
-  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -42,24 +34,33 @@ function Todos() {
         populateCache: true,
         revalidate: false
       });
+      setShowAddTask(false);
+      setNewTaskName('');
+      setNewTaskDescription('');
     }
   };
 
   const handleRemoveTask = (id) => {
-    deleteTaskMutation.mutate(id)
+    const newTasks = tasks.filter((task) => task.id !== id);
+    mutate(deleteTask(id), {
+      optimisticData: newTasks,
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false
+    });
   }
   
   return (
-    <div className='todo-form'>
-      <div className="header">
+    <div className={todoStyle.todo_form}>
+      <div className={todoStyle.header}>
         <h3>
           <span>Today</span>
           <small>{new Date().toDateString()}</small>
         </h3>
       </div>
-      <div className="task-container">
+      <div className={todoStyle.task_container}>
         {showAddTask ? (
-          <div className="add-task-box">
+          <div className={todoStyle.add_task_box}>
             <input
               type="text"
               placeholder="Task Name"
@@ -75,7 +76,7 @@ function Todos() {
               <button type='submit' onClick={() => handleAddTask()}>
                 Add Task
               </button>
-              <button className='cancel-btn' 
+              <button className={todoStyle.cancel_btn}
                 onClick={() => {setShowAddTask(false); setNewTaskDescription('');setNewTaskName('') }}
               >
                 Cancel
@@ -85,21 +86,24 @@ function Todos() {
         ) : (
           <button type='submit' onClick={() => setShowAddTask(true)}> Add Task</button>
         )}
-        {tasks.map((task) => (
-          <div className="task" key={task.id}>
+        {tasks ? tasks.map((task) => (
+          <div className={todoStyle.task} key={task.id}>
             <input
               type="checkbox"
               checked={task.is_completed}
             />
-            <div className="task-details">
-              <div className='task-name'>{task.content}</div>
-              <div className='task-desc'>{task.description}</div>
+            <div className={todoStyle.task_details}>
+              <div className={todoStyle.task_name}>{task.content}</div>
+              <div className={todoStyle.task_desc}>{task.description}</div>
             </div>
             <div>
-              <button className="remove-btn" onClick={() => handleRemoveTask(task.id)}>Remove</button>
+              <button className={todoStyle.remove_btn} onClick={() => handleRemoveTask(task.id)}>Remove</button>
             </div>
           </div>
-        ))}
+        ))
+        :
+        null
+      }
       </div>
     </div>
   );

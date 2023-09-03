@@ -1,0 +1,27 @@
+.column {
+    float: left;
+    width: 17.50%;
+    padding: 5px;
+    margin: 5px;
+  }
+  
+.column img{
+  width: 200px;
+  height: 200px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search{
+  margin: 20px;
+  padding: 10px;
+}
+
+.search input{
+  width: 380px;
+  height: 39px;
+  border-radius: 5px;
+}
