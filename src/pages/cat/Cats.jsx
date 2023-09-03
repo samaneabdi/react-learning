@@ -1,12 +1,28 @@
-import React, { useState } from 'react'
-import { useQuery } from "react-query";
-import { fetchCats } from "../../api/cats";
+import React, { useState } from 'react';
+import { useInfiniteQuery } from "react-query";
 import catStyle from './cat.module.css';
+import { fetchCats } from "../../api/cats";
 
 function Cats() {
   const [search, setSearch] = useState("");
-  const { data: cats, isLoading, isError } = useQuery(["cats", search], () =>
-    fetchCats(search)
+  const {
+    data: cats,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    ["cats", search],
+    ({ pageParam = 0}) => fetchCats(search, pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const expectedPageSize = allPages[0].length;
+        if (lastPage.length < expectedPageSize) {
+          return undefined; 
+        }
+        return (allPages.length * expectedPageSize) + allPages.length;
+      },
+    }
   );
 
   if (isLoading) {
@@ -16,30 +32,36 @@ function Cats() {
   if (isError) {
     return <p>Error...</p>;
   }
+
   return (
     <>
       <div className={catStyle.row}>
-          <div className={catStyle.search}>
-            <label htmlFor="search">Serach : </label>
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              id="search"
-            />
-            <br />
-          </div>
+        <div className={catStyle.search}>
+          <label htmlFor="search">Search:</label>
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            id="search"
+          />
+          <br />
+        </div>
       </div>
       <div className={catStyle.row}>
-        {cats.map((cat) => (
-          <div key={cat.name} className={catStyle.column}>
-            <img key={cat.name} src={cat.image_link} alt="tt" />
-            <div>{cat.name}</div>
-          </div>
-        ))}
+        {cats.pages.map((page) =>
+          page.map((cat) => (
+            <div key={cat.name} className={catStyle.column}>
+              <img key={cat.name} src={cat.image_link} alt={cat.name} />
+              <div>{cat.name}</div>
+            </div>
+          ))
+        )}
       </div>
+      {hasNextPage && (
+        <button className={catStyle.show_more} onClick={() => fetchNextPage()}>Show More</button>
+      )}
     </>
-  )
+  );
 }
 
-export default Cats
+export default Cats;
