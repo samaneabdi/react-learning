@@ -11,25 +11,19 @@ const client = axios.create({
   },
 });
 
-let tasks = [];
-
 const fetchTask = async () => {
   const response = await client.get();
-  tasks = response.data;
-  return tasks;
+  return response.data;
 };
 
 const createTask = async (newTaskData) => {
     const response = await client.post("", newTaskData);
-    tasks = [...tasks, response.data];
-    return tasks;
+    return response;
 };
 
 const deleteTask = async (id) => {
-  await client.delete(id);
-  tasks = tasks.filter((task) => task.id !== id);
-
-  return tasks;
+  const response = await client.delete(id);
+  return response.data;
 };
 
 export { fetchTask, createTask, deleteTask };
