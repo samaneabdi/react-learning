@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import { useInfiniteQuery } from "react-query";
 import catStyle from './cat.module.css';
 import { fetchCats } from "../../api/cats";
+import { useDispatch, useSelector } from "react-redux";
+import { setSearch } from '../../store/catSlice';
 
 function Cats() {
-  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+ const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
   const {
     data: cats,
-    isLoading,
+    // isLoading,
     isError,
     fetchNextPage,
     hasNextPage,
@@ -25,9 +28,9 @@ function Cats() {
     }
   );
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
   if (isError) {
     return <p>Error...</p>;
@@ -41,14 +44,14 @@ function Cats() {
           <input
             type="search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>dispatch(setSearch(e.target.value))}
             id="search"
           />
           <br />
         </div>
       </div>
       <div className={catStyle.row}>
-        {cats.pages.map((page) =>
+        {cats?.pages.map((page) =>
           page.map((cat) => (
             <div key={cat.name} className={catStyle.column}>
               <img key={cat.name} src={cat.image_link} alt={cat.name} />
