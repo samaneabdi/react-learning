@@ -10,9 +10,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   font-size: calc(7px + 2vmin);
   color: white;
+  padding: 10px;
+  margin-right: 10px;
 }
 
 .App-header a:visited, .App-header a{
@@ -39,4 +41,16 @@ footer{
   color: white;
 }
 
+.ant-badge .ant-badge-multiple-words{
+  padding: 0 2px;
+}
+
+.ant-badge .ant-badge-count-sm {
+  font-size: 9px;
+}
+
+.btnIcon{
+  font-size: 20px;
+  color: white;
+}
 
