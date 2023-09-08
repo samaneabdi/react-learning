@@ -15,50 +15,48 @@ function App() {
   const [showBasket, setShowBasket] = useState(false); 
 
   const addToList = (product) => {
-    setSelectedProducts((prevSelectedProducts) => {
-      const existingProduct = prevSelectedProducts.find((p) => p.id === product.id);
+    const existingProductIndex = selectedProducts.findIndex((p) => p.id === product.id);
 
-      if (existingProduct) {
-        existingProduct.quantity += 1;
-        return [...prevSelectedProducts];
-      } else {
-        const newProduct = { ...product, quantity: 1 };
-        return [...prevSelectedProducts, newProduct];
-      }
-    });
+    if (existingProductIndex !== -1) {
+      selectedProducts[existingProductIndex].quantity += 1;
+      setSelectedProducts(selectedProducts);
+    } else {
+      selectedProducts.push({ ...product, quantity: 1 });
+      setSelectedProducts(selectedProducts);
+    }
 
-    setProducts((prevProducts) => {
-      const updatedProducts = prevProducts.map((p) =>
-        p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-      );
-      return updatedProducts;
-    });
+    const productIndex = products.findIndex((p) => p.id === product.id);
+    if (productIndex !== -1) {
+      products[productIndex].quantity += 1;
+      setProducts(products);
+    }
 
-    setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price);
+    let price = totalPrice;
+    price += product.price;
+    setTotalPrice(price);
   };
 
   const removeFromList = (product) => {
-    setSelectedProducts((prevSelectedProducts) => {
-      const existingProduct = prevSelectedProducts.find((p) => p.id === product.id);
+    const existingProductIndex = selectedProducts.findIndex((p) => p.id === product.id);
 
-      if (existingProduct && existingProduct.quantity > 0) {
-        existingProduct.quantity -= 1;
-        return [...prevSelectedProducts];
+    if (existingProductIndex !== -1) {
+      if (selectedProducts[existingProductIndex].quantity > 1) {
+        selectedProducts[existingProductIndex].quantity -= 1;
+        setSelectedProducts(selectedProducts);
       } else {
-        const updatedSelectedProducts = prevSelectedProducts.filter((p) => p.id !== product.id);
-        return updatedSelectedProducts;
+        selectedProducts.splice(existingProductIndex, 1);
+        setSelectedProducts(selectedProducts);
       }
-    });
+    }
 
-    setProducts((prevProducts) => {
-      const updatedProducts = prevProducts.map((p) =>
-        p.id === product.id && p.quantity > 0 ? { ...p, quantity: p.quantity - 1 } : p
-      );
-      return updatedProducts;
-    });
+    const productIndex = products.findIndex((p) => p.id === product.id);
+    if (productIndex !== -1 && products[productIndex].quantity > 0) {
+      products[productIndex].quantity -= 1;
 
-    if (product.quantity > 0) {
-      setTotalPrice((prevTotalPrice) => prevTotalPrice - product.price);
+      let price = totalPrice;
+      price -= product.price;
+      setTotalPrice(price);
+      setProducts(products);
     }
   };
   
