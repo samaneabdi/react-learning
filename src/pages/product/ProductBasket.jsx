@@ -1,13 +1,15 @@
-import React from 'react'
-import productStyle from "./product.module.css"
+import React, { useContext } from 'react'
+import { BasketContext } from '../../App';
+import productStyle from "./product.module.css";
 
-function ProductBasket({productItem, totalPrice}) {
-
+function ProductBasket({ totalPrice}) {
+const basket = useContext(BasketContext);
+console.log({basket});
   return (
     <div className={productStyle.selected_products}>
       <h3>Selected Products</h3>
       <ul>
-        {productItem?.map((item) => (
+        {basket?.map((item) => (
           <li key={item.id}>
             {item.title} - Quantity: {item.quantity}
           </li>
