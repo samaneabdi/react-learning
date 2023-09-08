@@ -7,10 +7,9 @@ import { setSearch } from '../../store/catSlice';
 
 function Cats() {
   const dispatch = useDispatch();
- const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
+ const search = useSelector(state => {console.log({state}); return  state.rootReducer.cat.search});
   const {
     data: cats,
-    // isLoading,
     isError,
     fetchNextPage,
     hasNextPage,
@@ -27,10 +26,6 @@ function Cats() {
       },
     }
   );
-
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
 
   if (isError) {
     return <p>Error...</p>;

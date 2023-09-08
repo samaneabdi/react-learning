@@ -22,7 +22,6 @@ function Todos() {
       setShowAddTask(false);
       setNewTaskName('');
       setNewTaskDescription('');
-      console.log("onmutate");
       return {previouseTasks};
     },
     onError: (err, newTodo, context) => {
