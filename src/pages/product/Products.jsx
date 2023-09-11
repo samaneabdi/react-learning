@@ -7,7 +7,7 @@ import productStyle from "./product.module.css";
 
 
 const Products = () => {
-  const products = useSelector(state => state.rootReducer.product.products)
+  const products = useSelector(state => state.productSlice.products)
 
   const dispatch = useDispatch();
   const addToList = (product) => {

@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import productStyle from "./product.module.css"
 
 function ProductBasket() {
-  const productItem = useSelector(state => state.rootReducer.product.selectedProducts);
-  const totalPrice = useSelector(state => state.rootReducer.product.totalPrice);
+  const productItem = useSelector(state => state.productSlice.selectedProducts);
+  const totalPrice = useSelector(state => state.productSlice.totalPrice);
 
   return (
     <div className={productStyle.selected_products}>

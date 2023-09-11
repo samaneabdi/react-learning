@@ -7,7 +7,7 @@ import { setSearch } from '../../store/catSlice';
 
 function Cats() {
   const dispatch = useDispatch();
- const search = useSelector(state => {console.log({state}); return  state.rootReducer.cat.search});
+ const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
   const {
     data: cats,
     isError,

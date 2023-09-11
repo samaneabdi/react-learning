@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import rootReducer from './rootReducer'
+import catSlice from './catSlice'
+import productSlice from './productSlice';
 
 export const store = configureStore({
-  reducer: {rootReducer},
+  reducer: {catSlice, productSlice},
 })
