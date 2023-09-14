@@ -1,13 +1,14 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Badge } from "antd";
-import { useSelector } from "react-redux";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { productStore } from "../store/productStore";
+
 
 const HeaderBadge = () =>{
     const navigate = useNavigate();
-
-    const selectedProducts = useSelector(state => state.productSlice.selectedProducts);
-    const totalSelectedProducts = selectedProducts.reduce((total, item) => total + item.quantity, 0);
+    const store = useContext(productStore);
+    const totalSelectedProducts = store.selectedProducts.reduce((total, item) => total + item.quantity, 0);
     return (
         <Badge size="small" count={totalSelectedProducts}>
         <ShoppingCartOutlined onClick={() => navigate("/ProductBasket")} className="btnIcon"/>

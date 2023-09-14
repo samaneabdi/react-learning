@@ -8,18 +8,20 @@ import Loading from "./components/Loading";
 import { QueryClientProvider } from "react-query";
 import queryClient from "./api/query-client";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { ProductStoreProvider } from "./store/productStore";
+import { CatStoreProvider } from "./store/catStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Suspense fallback={<Loading />}>
-    <Provider store={store}>
+    <ProductStoreProvider>
+      <CatStoreProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
-    </Provider>
+      </CatStoreProvider>
+    </ProductStoreProvider>
   </Suspense>
 );
 
