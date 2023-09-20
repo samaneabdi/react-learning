@@ -1,31 +1,16 @@
 import React  from 'react';
-import { useInfiniteQuery } from "react-query";
 import catStyle from './cat.module.css';
-import { fetchCats } from "../../api/cats";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearch } from '../../store/catSlice';
+import { useGetCatQuery } from '../../api/catsApiService';
 
 function Cats() {
   const dispatch = useDispatch();
- const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
+ const search = useSelector(state => {return  state.catSlice.search});
   const {
     data: cats,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(
-    ["cats", search],
-    ({ pageParam = 0}) => fetchCats(search, pageParam),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const expectedPageSize = allPages[0].length;
-        if (lastPage.length < expectedPageSize) {
-          return undefined; 
-        }
-        return (allPages.length * expectedPageSize) + allPages.length;
-      },
-    }
-  );
+    isError
+  } = useGetCatQuery(search)
 
   if (isError) {
     return <p>Error...</p>;
@@ -46,18 +31,15 @@ function Cats() {
         </div>
       </div>
       <div className={catStyle.row}>
-        {cats?.pages.map((page) =>
-          page.map((cat) => (
+        {cats?.map((cat) => (
             <div key={cat.name} className={catStyle.column}>
               <img key={cat.name} src={cat.image_link} alt={cat.name} />
               <div>{cat.name}</div>
             </div>
           ))
-        )}
+        }
       </div>
-      {hasNextPage && (
-        <button className={catStyle.show_more} onClick={() => fetchNextPage()}>Show More</button>
-      )}
+    
     </>
   );
 }

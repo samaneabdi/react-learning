@@ -1,9 +1,10 @@
 import React,{useState} from 'react'
-import { useMutation, useQuery } from 'react-query'
+// import { useMutation } from 'react-query'
 import todoStyle from"./todo.module.css";
-import { fetchTask, createTask, deleteTask } from '../../api/todos';
-import queryClient from '../../api/query-client';
-import { v4 as uuidv4 } from "uuid";
+// import { createTask, deleteTask } from '../../api/todos';
+// import queryClient from '../../api/query-client';
+// import { v4 as uuidv4 } from "uuid";
+import { useGetTodoQuery, useCreateTodoMutation, useDeleteTodoMutation } from '../../api/todoApiService';
 
 function Todos() {
 
@@ -11,38 +12,40 @@ function Todos() {
   const [newTaskName, setNewTaskName] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
-  const { data: tasks, isLoading, isError, error } = useQuery('tasks', fetchTask);
+  const { data: tasks, isLoading, isError, error } = useGetTodoQuery();
+  const [ createTodo ] = useCreateTodoMutation();
+  const [ deleteTodo ] = useDeleteTodoMutation();
 
-  const createTaskMutation = useMutation(createTask, {
-    onMutate: async newTask =>{
-      await queryClient.cancelQueries('tasks');
-      const previouseTasks = queryClient.getQueriesData('tasks');
-      newTask.id = uuidv4();
-      queryClient.setQueriesData('tasks', old => [...old, newTask]);
-      setShowAddTask(false);
-      setNewTaskName('');
-      setNewTaskDescription('');
-      return {previouseTasks};
-    },
-    onError: (err, newTodo, context) => {
-      queryClient.setQueryData('tasks', context.previouseTasks);
-      setShowAddTask(true);
-      setNewTaskName(newTodo.content);
-      setNewTaskDescription(newTodo.description);
-    },
-    onSettled: ()=>{
-      queryClient.invalidateQueries('tasks');
-    },
-  });
+  // const createTaskMutation = useMutation(createTask, {
+  //   onMutate: async newTask =>{
+  //     await queryClient.cancelQueries('tasks');
+  //     const previouseTasks = queryClient.getQueriesData('tasks');
+  //     newTask.id = uuidv4();
+  //     queryClient.setQueriesData('tasks', old => [...old, newTask]);
+  //     setShowAddTask(false);
+  //     setNewTaskName('');
+  //     setNewTaskDescription('');
+  //     return {previouseTasks};
+  //   },
+  //   onError: (err, newTodo, context) => {
+  //     queryClient.setQueryData('tasks', context.previouseTasks);
+  //     setShowAddTask(true);
+  //     setNewTaskName(newTodo.content);
+  //     setNewTaskDescription(newTodo.description);
+  //   },
+  //   onSettled: ()=>{
+  //     queryClient.invalidateQueries('tasks');
+  //   },
+  // });
 
-  const deleteTaskMutation = useMutation(deleteTask, {
-    onSettled: ()=>{
-      queryClient.invalidateQueries('tasks');
-    },
-    onError: () => {
-      queryClient.invalidateQueries('tasks');
-    },
-  });
+  // const deleteTaskMutation = useMutation(deleteTask, {
+  //   onSettled: ()=>{
+  //     queryClient.invalidateQueries('tasks');
+  //   },
+  //   onError: () => {
+  //     queryClient.invalidateQueries('tasks');
+  //   },
+  // });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -54,7 +57,7 @@ function Todos() {
 
   const handleAddTask = () => {
     if (newTaskName.trim() !== '') {
-      createTaskMutation.mutate({
+      createTodo({
         content: newTaskName,
         description: newTaskDescription,
         is_completed: false })
@@ -62,7 +65,7 @@ function Todos() {
   };
 
   const handleRemoveTask = (id) => {
-    deleteTaskMutation.mutate(id)
+    deleteTodo(id)
   }
   
   return (
