@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-// import { selectSearch } from "../store/catSlice"; // Import your selector
 
 const apiKey = "sbfHb94ZML5YXYHMl93ejA==wDBJDF3ENKztXz7z";
 
@@ -12,12 +11,12 @@ export const catApi = createApi({
             return headers;
             }
          }),
+   
     endpoints: (builder) => ({
       getCat: builder.query({
-        query: (name) => {
-        
-            if(name){
-                return {url:"/",params:{name}}
+        query: (search) => {
+            if(search){
+                return {url:"/",params:{name: search}}
             }
             return {url:"/", params:{min_weight:1}}
         },

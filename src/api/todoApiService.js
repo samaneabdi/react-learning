@@ -13,10 +13,13 @@ export const todoApi = createApi({
                 "X-Request-Id", uuidv4(),
                 "Content-Type", "application/json")}
         }),
+    tagTypes: ['todo'],
+    refetchOnMountOrArgChange: true,
+    keepUnusedDataFor: 10 * 60 * 1000, 
     endpoints:(builder) =>({
         getTodo: builder.query({
             query: () => ({url:"/"}),
-            providesTags: ["todoApi"]
+            providesTags: ["todo"]
         }),
         createTodo: builder.mutation({
             query: (newTaskData) => ({
@@ -24,15 +27,42 @@ export const todoApi = createApi({
                 method: "POST",
                 body: newTaskData
             }),
-            invalidatesTags: ["todoApi"]
+            async onQueryStarted(newTaskData , { dispatch, queryFulfilled }) {
+
+                const patchResult = dispatch(
+                    todoApi.util.updateQueryData('getTodo', undefined, (draft) => {
+                        draft.push(newTaskData)
+                  })
+                )
+                try {
+                  await queryFulfilled
+                } catch {
+                  patchResult.undo()
+                }
+            },
+            invalidatesTags: ["todo"]
         }),
         deleteTodo: builder.mutation({
             query: ({id}) => ({
                 url:`/${id}`,
                 method:"DELETE",
-                // body: {id}
             }),
-            invalidatesTags: ["todoApi"]
+            async onQueryStarted({id} , { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    todoApi.util.updateQueryData('getTodo', undefined, (draft) => {
+                        const index = draft.findIndex((item) => item.id === id);
+                        if (index !== -1) {
+                          draft.splice(index, 1);
+                        }
+                  })
+                )
+                try {
+                  await queryFulfilled
+                } catch {
+                  patchResult.undo()
+                }
+            },
+            invalidatesTags: ["todo"]
         })
     })
     

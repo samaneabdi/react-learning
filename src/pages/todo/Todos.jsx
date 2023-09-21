@@ -16,37 +16,6 @@ function Todos() {
   const [ createTodo ] = useCreateTodoMutation();
   const [ deleteTodo ] = useDeleteTodoMutation();
 
-  // const createTaskMutation = useMutation(createTask, {
-  //   onMutate: async newTask =>{
-  //     await queryClient.cancelQueries('tasks');
-  //     const previouseTasks = queryClient.getQueriesData('tasks');
-  //     newTask.id = uuidv4();
-  //     queryClient.setQueriesData('tasks', old => [...old, newTask]);
-  //     setShowAddTask(false);
-  //     setNewTaskName('');
-  //     setNewTaskDescription('');
-  //     return {previouseTasks};
-  //   },
-  //   onError: (err, newTodo, context) => {
-  //     queryClient.setQueryData('tasks', context.previouseTasks);
-  //     setShowAddTask(true);
-  //     setNewTaskName(newTodo.content);
-  //     setNewTaskDescription(newTodo.description);
-  //   },
-  //   onSettled: ()=>{
-  //     queryClient.invalidateQueries('tasks');
-  //   },
-  // });
-
-  // const deleteTaskMutation = useMutation(deleteTask, {
-  //   onSettled: ()=>{
-  //     queryClient.invalidateQueries('tasks');
-  //   },
-  //   onError: () => {
-  //     queryClient.invalidateQueries('tasks');
-  //   },
-  // });
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -60,12 +29,19 @@ function Todos() {
       createTodo({
         content: newTaskName,
         description: newTaskDescription,
-        is_completed: false })
+        is_completed: false }).unwrap().catch(() => {
+          setShowAddTask(true);
+          setNewTaskName(newTaskName);
+          setNewTaskDescription(newTaskDescription);
+        });
+        setShowAddTask(false);
+        setNewTaskName('');
+        setNewTaskDescription('');
     }
   };
 
   const handleRemoveTask = (id) => {
-    deleteTodo(id)
+    deleteTodo({id});
   }
   
   return (
