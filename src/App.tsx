@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { fetchCats } from "./api/cats";
 
+type Cat = {
+  name: string,
+  image_link: string
+}
+
 function App() {
-  const [cats, setCats] = useState([]);
+  const [cats, setCats] = useState<Cat[]>([]);
   const [search, setSearch]= useState("");
 
   useEffect(() => {

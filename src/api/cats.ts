@@ -1,6 +1,6 @@
 const apiKey = "sbfHb94ZML5YXYHMl93ejA==wDBJDF3ENKztXz7z";
 const url =`https://api.api-ninjas.com/v1/cats?min_weight=1`;
-const fetchCats = async (name) => {
+const fetchCats = async (name: string) => {
     try {
         let searchQuery = "";
         if(name){

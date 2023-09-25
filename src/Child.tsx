@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { memo } from "react";
 let global = 0;
-const Child = ({addCounter}) =>{
+
+const Child = ({addCounter}:{addCounter:() => void}) =>{
     
     console.log("child is rendering");
     const ref = useRef(0);
