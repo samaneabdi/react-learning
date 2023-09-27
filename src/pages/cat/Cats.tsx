@@ -5,16 +5,29 @@ import { fetchCats } from "../../api/cats";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearch } from '../../store/catSlice';
 
+type Cat = {
+  name: string ,
+  image_link: string
+}
+
+type RootState = {
+  catSlice: CatSliceState;
+};
+
+type CatSliceState = {
+  search: string;
+}
+
 function Cats() {
   const dispatch = useDispatch();
- const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
+ const search = useSelector((state : RootState) => {console.log({state}); return  state.catSlice.search});
   const {
     data: cats,
     // isLoading,
     isError,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
+  } = useInfiniteQuery<Cat[]>(
     ["cats", search],
     ({ pageParam = 0}) => fetchCats(search, pageParam),
     {

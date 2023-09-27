@@ -9,7 +9,7 @@ const client = axios.create({
     "Content-Type": "application/json",
   },
 });
-const fetchCats = async (name: string, offset:Number) => {
+const fetchCats = async (name: string, offset:number) => {
     let searchQuery = "?min_weight=1";
     if (name) {
       searchQuery += `&name=${name}`;
