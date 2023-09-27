@@ -4,20 +4,23 @@ import { fetchTask, createTask, deleteTask } from '../../api/todos';
 import useSWR from 'swr'
 import { v4 as uuidv4 } from "uuid";
 
+// eslint-disable-next-line no-undef
+type Task = {
+  id?:string ,
+  content: string,
+  description: string,
+  is_completed: boolean
+}
 function Todos() {
 
   const [showAddTask, setShowAddTask] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
-  const { data: tasks, isLoading, isError, error, mutate } = useSWR('tasks', fetchTask);
+  const { data: tasks, isLoading, mutate } = useSWR('tasks', fetchTask);
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error : {error}</div>;
   }
 
   const handleAddTask = () => {
@@ -29,7 +32,7 @@ function Todos() {
         id: uuidv4()
       };
       mutate(createTask(newTask), {
-        optimisticData: [...tasks, newTask],
+        optimisticData: [...tasks as Task[], newTask],
         rollbackOnError: true,
         populateCache: true,
         revalidate: false
@@ -40,8 +43,8 @@ function Todos() {
     }
   };
 
-  const handleRemoveTask = (id) => {
-    const newTasks = tasks.filter((task) => task.id !== id);
+  const handleRemoveTask = (id: string) => {
+    const newTasks = tasks?.filter((task: Task) => task.id !== id);
     mutate(deleteTask(id), {
       optimisticData: newTasks,
       rollbackOnError: true,
@@ -86,7 +89,7 @@ function Todos() {
         ) : (
           <button type='submit' onClick={() => setShowAddTask(true)}> Add Task</button>
         )}
-        {tasks ? tasks.map((task) => (
+        {tasks ? tasks.map((task: Task) => (
           <div className={todoStyle.task} key={task.id}>
             <input
               type="checkbox"
@@ -97,7 +100,7 @@ function Todos() {
               <div className={todoStyle.task_desc}>{task.description}</div>
             </div>
             <div>
-              <button className={todoStyle.remove_btn} onClick={() => handleRemoveTask(task.id)}>Remove</button>
+              <button className={todoStyle.remove_btn} onClick={() => handleRemoveTask(task.id!)}>Remove</button>
             </div>
           </div>
         ))

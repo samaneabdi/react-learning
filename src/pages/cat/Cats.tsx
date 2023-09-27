@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useInfiniteQuery } from "react-query";
-import catStyle from './cat.module.css';
+import catStyle from '../cat/cat.module.css';
 import { fetchCats } from "../../api/cats";
+
+type Cat = {
+  name: string,
+  image_link: string
+}
 
 function Cats() {
   const [search, setSearch] = useState("");
@@ -11,7 +16,7 @@ function Cats() {
     isError,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
+  } = useInfiniteQuery<Cat[]>(
     ["cats", search],
     ({ pageParam = 0}) => fetchCats(search, pageParam),
     {
@@ -48,8 +53,8 @@ function Cats() {
         </div>
       </div>
       <div className={catStyle.row}>
-        {cats.pages.map((page) =>
-          page.map((cat) => (
+        {cats?.pages.map((page) =>
+          page?.map((cat:Cat) => (
             <div key={cat.name} className={catStyle.column}>
               <img key={cat.name} src={cat.image_link} alt={cat.name} />
               <div>{cat.name}</div>
