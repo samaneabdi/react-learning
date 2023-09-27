@@ -5,6 +5,7 @@
       "plugin:react/recommended",
       "plugin:jsx-a11y/recommended",
       "plugin:react-hooks/recommended",
+      "plugin:@typescript-eslint/recommended",
       "prettier"
     ],
     "rules": {
@@ -30,7 +31,7 @@
       },
       "import/resolver": {
         "node": {
-          "extensions": [".js", ".jsx"]
+          "extensions": [".js", ".jsx",".ts", ".tsx"]
         }
       }
     }
