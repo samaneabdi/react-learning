@@ -1,25 +1,26 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Badge } from "antd";
 import { Link, Outlet } from "react-router-dom";
-import { productInitialList } from "../src/api/productData";
+import { productInitialList } from "./api/productData";
 import React, {useState} from "react";
 import "./App.css";
 import Products from "./pages/product/Products";
 import ProductBasket from "./pages/product/ProductBasket";
 import { createContext } from 'react';
+import { Product } from "../src/api/productType";
 
-const BasketContext = createContext([]);
+const BasketContext = createContext<Product[]>([]);
 
 function App() {
 
   const [products, setProducts] = useState(productInitialList);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [showBasket, setShowBasket] = useState(false); 
 
 
 
-  const addToList = (product) => {
+  const addToList = (product: Product) => {
     const existingProductIndex = selectedProducts.findIndex((p) => p.id === product.id);
 
     if (existingProductIndex !== -1) {
@@ -41,7 +42,7 @@ function App() {
     setTotalPrice(price);
   };
 
-  const removeFromList = (product) => {
+  const removeFromList = (product: Product) => {
     const existingProductIndex = selectedProducts.findIndex((p) => p.id === product.id);
 
     if (existingProductIndex !== -1) {
@@ -71,7 +72,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Badge size="small" count={totalSelectedProducts}>
-          <ShoppingCartOutlined onClick={() => setShowBasket(!showBasket)} className="btnIcon"/>
+          <ShoppingCartOutlined rev={'shopCart'} onClick={() => setShowBasket(!showBasket)} className="btnIcon"/>
         </Badge>
         <Link to="/ProductBasket">ProductBasket</Link>
       </header>
@@ -80,12 +81,9 @@ function App() {
           removeFromList={removeFromList} 
           addToList={addToList}
           products={products}
-          selectedProducts={selectedProducts}
-          totalPrice={totalPrice}
         />
         {showBasket && 
           <ProductBasket 
-            productItem={selectedProducts}
             totalPrice={totalPrice}
           />
         }
