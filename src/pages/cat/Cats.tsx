@@ -3,9 +3,14 @@ import { useQuery } from "react-query";
 import { fetchCats } from "../../api/cats";
 import './cat.css';
 
+type Cat ={
+  name: string,
+  image_link: string
+}
+
 function Cats() {
   const [search, setSearch] = useState("");
-  const { data: cats, isLoading, isError } = useQuery(["cats", search], () =>
+  const { data: cats, isLoading, isError } = useQuery<Cat[]>(["cats", search], () =>
     fetchCats(search)
   );
   
@@ -31,7 +36,7 @@ function Cats() {
           </div>
       </div>
       <div className="row">
-        {cats.map((cat) => (
+        {cats?.map((cat) => (
           <div key={cat.name} className="column">
             <img key={cat.name} src={cat.image_link} alt="tt" />
             <div>{cat.name}</div>

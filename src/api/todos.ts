@@ -3,6 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 const apiKey = "Bearer c6669c72a45113aa347c235b8a49e3406011bcd1";
 const url = `https://api.todoist.com/rest/v2/tasks`;
 
+type Task = {
+  id?: string,
+  content: string,
+  description: string,
+  is_completed: boolean
+}
+
 const fetchTask = async () => {
   const response = await fetch(url, {
     method: "GET",
@@ -14,7 +21,7 @@ const fetchTask = async () => {
   return await response.json();
 };
 
-const createTask = async (newTaskData) => {
+const createTask = async (newTaskData : Task) => {
   const response = await fetch(url, {
     method: "Post",
     headers: {
@@ -28,7 +35,7 @@ const createTask = async (newTaskData) => {
   return await response.json();
 };
 
-const deleteTask = async (id) => {
+const deleteTask = async (id: string) => {
   const response = await fetch(url + `/${id}`, {
     method: "Delete",
     headers: {
