@@ -1,7 +1,6 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-// eslint-disable-next-line no-undef
 type Task = {
   id?:string ,
   content: string,
