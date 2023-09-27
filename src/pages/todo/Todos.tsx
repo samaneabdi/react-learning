@@ -25,7 +25,15 @@ function Todos() {
       await queryClient.cancelQueries('tasks');
       const previouseTasks = queryClient.getQueriesData<Task[]>('tasks');
       newTask.id = uuidv4();
-      queryClient.setQueriesData<Task[]>('tasks', old => [...old, newTask]);
+      queryClient.setQueriesData<Task[]>('tasks', old => {
+        if(old)
+        {
+          return [...old, newTask]
+        }
+        else{
+          return [newTask];
+        }
+      });
       setShowAddTask(false);
       setNewTaskName('');
       setNewTaskDescription('');
