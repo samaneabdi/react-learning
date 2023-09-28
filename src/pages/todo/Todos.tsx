@@ -17,40 +17,70 @@ function Todos() {
   const [newTaskName, setNewTaskName] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
-  const { data: tasks, isLoading, isError, error } = useQuery<Task[]>('tasks', fetchTask);
+  const { data: tasks, isLoading, isError, error } = useQuery(['tasks'], fetchTask);
 
-  const createTaskMutation = useMutation(createTask ,{
-    onMutate: async (newTask) =>{
-      await queryClient.cancelQueries('tasks');
-      const previouseTasks = queryClient.getQueriesData<Task[]>('tasks');
-      newTask.id = uuidv4();
-      queryClient.setQueriesData<Task[]>('tasks', old => {
-        if(old)
-        {
-          return [...old, newTask]
+  const createTaskMutation = useMutation({mutationFn:createTask,
+     onMutate: async (newTask) =>{
+        await queryClient.cancelQueries(['tasks']);
+        const previouseTasks = queryClient.getQueriesData(['tasks']);
+        newTask.id = uuidv4();
+        queryClient.setQueriesData<Task[]>(['tasks'], old => {
+          if(old)
+          {
+            return [...old, newTask]
+          }
+          else{
+            return [newTask];
+          }
+        });
+        setShowAddTask(false);
+        setNewTaskName('');
+        setNewTaskDescription('');
+        console.log("onmutate");
+        return {previouseTasks};
+      },
+      onError: async (err, newTodo, context: {previouseTasks: Task[]}) => {
+        if (context?.previouseTasks) {
+        queryClient.setQueryData('tasks', context.previouseTasks);
         }
-        else{
-          return [newTask];
-        }
-      });
-      setShowAddTask(false);
-      setNewTaskName('');
-      setNewTaskDescription('');
-      console.log("onmutate");
-      return {previouseTasks};
-    },
-    onError: (err, newTodo, context: { previouseTasks?: Task[] }) => {
-      if (context?.previouseTasks) {
-      queryClient.setQueryData('tasks', context.previouseTasks);
-      }
-      setShowAddTask(true);
-      setNewTaskName(newTodo.content);
-      setNewTaskDescription(newTodo.description);
-    },
-    onSettled: ()=>{
-      queryClient.invalidateQueries('tasks');
-    },
-  });
+        setShowAddTask(true);
+        setNewTaskName(newTodo.content);
+        setNewTaskDescription(newTodo.description);
+      },
+    })
+  // {
+  //   mutationFn: createTask,
+  //   onMutate: async (newTask) =>{
+  //     await queryClient.cancelQueries('tasks');
+  //     const previouseTasks = queryClient.getQueriesData<Task[]>('tasks');
+  //     newTask.id = uuidv4();
+  //     queryClient.setQueriesData<Task[]>('tasks', old => {
+  //       if(old)
+  //       {
+  //         return [...old, newTask]
+  //       }
+  //       else{
+  //         return [newTask];
+  //       }
+  //     });
+  //     setShowAddTask(false);
+  //     setNewTaskName('');
+  //     setNewTaskDescription('');
+  //     console.log("onmutate");
+  //     return {previouseTasks};
+  //   },
+  //   onError: (err, newTodo, context: { previouseTasks?: Task[] }) => {
+  //     if (context?.previouseTasks) {
+  //     queryClient.setQueryData('tasks', context.previouseTasks);
+  //     }
+  //     setShowAddTask(true);
+  //     setNewTaskName(newTodo.content);
+  //     setNewTaskDescription(newTodo.description);
+  //   },
+  //   onSettled: ()=>{
+  //     queryClient.invalidateQueries('tasks');
+  //   },
+  // });
 
   const deleteTaskMutation = useMutation(deleteTask, {
     onError: () => {
