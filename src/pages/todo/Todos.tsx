@@ -39,7 +39,7 @@ function Todos() {
         console.log("onmutate");
         return {previouseTasks};
       },
-      onError: async (err, newTodo, context: {previouseTasks: Task[]}) => {
+      onError: async (err, newTodo, context) => {
         if (context?.previouseTasks) {
         queryClient.setQueryData('tasks', context.previouseTasks);
         }
