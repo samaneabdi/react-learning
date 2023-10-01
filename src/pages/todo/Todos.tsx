@@ -20,7 +20,7 @@ function Todos() {
   
   const { data: tasks, isLoading, isError, error } = useQuery<Task[]>('tasks', fetchTask);
 
-  const createTaskMutation = useMutation(createTask, {
+  const createTaskMutation = useMutation({ mutationFn:createTask,
     onMutate: async newTask =>{
       await queryClient.cancelQueries('tasks');
       const previouseTasks = queryClient.getQueriesData<Task[]>('tasks');
@@ -40,8 +40,11 @@ function Todos() {
       console.log("onmutate");
       return {previouseTasks};
     },
-    onError: (err, newTodo, context :{previouseTasks:Task}) => {
-      queryClient.setQueryData('tasks', context.previouseTasks);
+    onError: (err, newTodo, context) => {
+      if(context?.previouseTasks)
+      {
+        queryClient.setQueryData('tasks', context.previouseTasks);
+      }
       setShowAddTask(true);
       setNewTaskName(newTodo.content);
       setNewTaskDescription(newTodo.description);
