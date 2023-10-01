@@ -2,18 +2,21 @@ import React  from 'react';
 import { useInfiniteQuery } from "react-query";
 import catStyle from './cat.module.css';
 import { fetchCats } from "../../api/cats";
-import { useDispatch, useSelector } from "react-redux";
 import { setSearch } from '../../store/catSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
+import { Cat } from '../../types/catType';
 
 function Cats() {
-  const dispatch = useDispatch();
- const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
+  const dispatch = useAppDispatch ()
+  const search = useAppSelector ((state) => state.catSlice.search);
+//const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
+
   const {
     data: cats,
     isError,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
+  } = useInfiniteQuery<Cat[]>(
     ["cats", search],
     ({ pageParam = 0}) => fetchCats(search, pageParam),
     {

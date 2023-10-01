@@ -1,13 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { productInitialList } from "../../src/api/productData";
+import { productInitialList } from "../api/productData";
+import { Product } from '../types/productType';
+
+interface ProductState {
+  selectedProducts: Product[],
+  products: Product[],
+  totalPrice: number,
+}
+
+const initialState = {
+  selectedProducts: [],
+  products: productInitialList,
+  totalPrice: 0,
+} as ProductState
 
 const productSlice = createSlice({
   name: 'product',
-  initialState: {
-    selectedProducts: [],
-    products: productInitialList,
-    totalPrice: 0,
-  },
+  initialState,
   reducers: {
     addToProductBasket: (state, action) => {
       const { product } = action.payload;

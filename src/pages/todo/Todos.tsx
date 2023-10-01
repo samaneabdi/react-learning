@@ -4,6 +4,7 @@ import todoStyle from"./todo.module.css";
 import { fetchTask, createTask, deleteTask } from '../../api/todos';
 import queryClient from '../../api/query-client';
 import { v4 as uuidv4 } from "uuid";
+import { Todo } from '../../types/todoType';
 
 function Todos() {
 
@@ -11,14 +12,22 @@ function Todos() {
   const [newTaskName, setNewTaskName] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
-  const { data: tasks, isLoading, isError, error } = useQuery('tasks', fetchTask);
+  const { data: tasks, isLoading, isError, error } = useQuery<Todo[]>('tasks', fetchTask);
 
   const createTaskMutation = useMutation(createTask, {
     onMutate: async newTask =>{
       await queryClient.cancelQueries('tasks');
       const previouseTasks = queryClient.getQueriesData('tasks');
       newTask.id = uuidv4();
-      queryClient.setQueriesData('tasks', old => [...old, newTask]);
+      queryClient.setQueriesData<Todo[]>('tasks', old =>
+      {
+        if(old){
+          return [...old, newTask]);
+        }
+        else{
+          return [newTask]
+        }
+      } 
       setShowAddTask(false);
       setNewTaskName('');
       setNewTaskDescription('');
