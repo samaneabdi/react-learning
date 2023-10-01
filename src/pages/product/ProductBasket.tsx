@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { BasketContext } from '../../App';
 import productStyle from "./product.module.css";
 
-function ProductBasket({ totalPrice}:{totalPrice: number}) {
+function ProductBasket({ totalPrice}:{totalPrice?: number}) {
 const basket = useContext(BasketContext);
 console.log({basket});
   return (

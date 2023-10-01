@@ -5,7 +5,7 @@ export type Product = {
     quantity: number
 }
 export type ProductProps = {
-    products:Product[],
-    addToList: (product:Product) => void, 
-    removeFromList: (product:Product) => void, 
+    products?:Product[],
+    addToList?: (product:Product) => void, 
+    removeFromList?: (product:Product) => void, 
 }

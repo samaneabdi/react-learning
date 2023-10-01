@@ -8,15 +8,15 @@ const Products = ({products, addToList, removeFromList} : ProductProps) => {
   return (
     <>
       <div className={productStyle.product_container}>
-        {products.map((item) => (
+        {products!.map((item) => (
           <div key={item.id} className={productStyle.product_box}>
             <h4>Title: {item.title}</h4>
             <h5>Price: {item.price}</h5>
             <div>
               <div className={productStyle.btn}>
-                <PlusOutlined rev={'plus'} className={productStyle.btnIcon} onClick={() => addToList(item)} />
+                <PlusOutlined rev={'plus'} className={productStyle.btnIcon} onClick={() => addToList!(item)} />
                 <span>{item.quantity}</span>
-                <DeleteOutlined rev={'delete'} className={productStyle.btnIcon} onClick={() => removeFromList(item)} />
+                <DeleteOutlined rev={'delete'} className={productStyle.btnIcon} onClick={() => removeFromList!(item)} />
               </div>
             </div>
           </div>
