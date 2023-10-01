@@ -1,10 +1,13 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hook';
 import productStyle from "./product.module.css"
 
 function ProductBasket() {
-  const productItem = useSelector(state => state.productSlice.selectedProducts);
-  const totalPrice = useSelector(state => state.productSlice.totalPrice);
+
+  const productItem = useAppSelector((state) => state.productSlice.selectedProducts);
+  const totalPrice = useAppSelector((state) => state.productSlice.totalPrice);
+
+  // const productItem = useSelector(state => state.productSlice.selectedProducts);
+  // const totalPrice = useSelector(state => state.productSlice.totalPrice);
 
   return (
     <div className={productStyle.selected_products}>

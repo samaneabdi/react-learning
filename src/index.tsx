@@ -8,7 +8,7 @@ import { QueryClientProvider } from "react-query";
 import queryClient from "./api/query-client";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+import store  from "./store/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(

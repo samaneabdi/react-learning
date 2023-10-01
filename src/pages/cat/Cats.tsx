@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hook';
 import { Cat } from '../../types/catType';
 
 function Cats() {
-  const dispatch = useAppDispatch ()
-  const search = useAppSelector ((state) => state.catSlice.search);
+  const dispatch = useAppDispatch()
+  const search = useAppSelector((state) => state.catSlice.search);
 //const search = useSelector(state => {console.log({state}); return  state.catSlice.search});
 
   const {
