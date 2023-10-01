@@ -1,9 +1,5 @@
 import React,{useState} from 'react'
-// import { useMutation } from 'react-query'
-import todoStyle from"./todo.module.css";
-// import { createTask, deleteTask } from '../../api/todos';
-// import queryClient from '../../api/query-client';
-// import { v4 as uuidv4 } from "uuid";
+import todoStyle from "./todo.module.css";
 import { useGetTodoQuery, useCreateTodoMutation, useDeleteTodoMutation } from '../../api/todoApiService';
 
 function Todos() {
@@ -12,7 +8,7 @@ function Todos() {
   const [newTaskName, setNewTaskName] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   
-  const { data: tasks, isLoading, isError, error } = useGetTodoQuery();
+  const { data: tasks, isLoading, isError, error } = useGetTodoQuery('getTodo');
   const [ createTodo ] = useCreateTodoMutation();
   const [ deleteTodo ] = useDeleteTodoMutation();
 
@@ -21,7 +17,7 @@ function Todos() {
   }
 
   if (isError) {
-    return <div>Error : {error}</div>;
+    return <div>Error : {String(error)}</div>;
   }
 
   const handleAddTask = () => {
@@ -40,7 +36,7 @@ function Todos() {
     }
   };
 
-  const handleRemoveTask = (id) => {
+  const handleRemoveTask = (id:string) => {
     deleteTodo({id});
   }
   
@@ -80,7 +76,7 @@ function Todos() {
         ) : (
           <button type='submit' onClick={() => setShowAddTask(true)}> Add Task</button>
         )}
-        {tasks.map((task) => (
+        {tasks!.map((task) => (
           <div className={todoStyle.task} key={task.id}>
             <input
               type="checkbox"
@@ -91,7 +87,7 @@ function Todos() {
               <div className={todoStyle.task_desc}>{task.description}</div>
             </div>
             <div>
-              <button className={todoStyle.remove_btn} onClick={() => handleRemoveTask(task.id)}>Remove</button>
+              <button className={todoStyle.remove_btn} onClick={() => handleRemoveTask(task.id!)}>Remove</button>
             </div>
           </div>
         ))}

@@ -1,20 +1,21 @@
 
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { addToProductBasket, removeFromProductBasket } from "../../store/productSlice";
+import { Product } from "../../types/productType";
 import productStyle from "./product.module.css";
 
 
 const Products = () => {
-  const products = useSelector(state => state.productSlice.products)
+  const products = useAppSelector((state) => state.productSlice.products);
+  const dispatch = useAppDispatch();
 
-  const dispatch = useDispatch();
-  const addToList = (product) => {
+  const addToList = (product:Product) => {
     dispatch(addToProductBasket({product}));
   };
 
-  const removeFromList = (product) => {
+  const removeFromList = (product:Product) => {
     dispatch(removeFromProductBasket({product}));
   };
 
@@ -27,9 +28,9 @@ const Products = () => {
             <h5>Price: {item.price}</h5>
             <div>
               <div className={productStyle.btn}>
-                <PlusOutlined className={productStyle.btnIcon} onClick={() => addToList(item)} />
+                <PlusOutlined rev={"plus"} className={productStyle.btnIcon} onClick={() => addToList(item)} />
                 <span>{item.quantity}</span>
-                <DeleteOutlined className={productStyle.btnIcon} onClick={() => removeFromList(item)} />
+                <DeleteOutlined rev={"delete"} className={productStyle.btnIcon} onClick={() => removeFromList(item)} />
               </div>
             </div>
           </div>

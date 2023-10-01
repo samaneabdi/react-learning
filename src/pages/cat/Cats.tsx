@@ -1,12 +1,14 @@
 import React  from 'react';
 import catStyle from './cat.module.css';
-import { useDispatch, useSelector } from "react-redux";
 import { setSearch } from '../../store/catSlice';
 import { useGetCatQuery } from '../../api/catsApiService';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
 
 function Cats() {
-  const dispatch = useDispatch();
- const search = useSelector(state => {return  state.catSlice.search});
+
+  const search = useAppSelector((state) => state.catSlice.search)
+  const dispatch = useAppDispatch();
+
   const {
     data: cats,
     isError

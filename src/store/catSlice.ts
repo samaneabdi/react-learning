@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { catApi } from "../api/catsApiService";
 
 export const catSlice = createSlice({
   name: "cat",
@@ -9,15 +8,6 @@ export const catSlice = createSlice({
   reducers: {
     setSearch: (state, action) => {
       state.search = action.payload;
-    },
-  },
-  extraReducers: {
-    [catApi.endpoints.getCat.reducerPath]: (builder) => {
-      builder.getExtraArguments = (state) => {
-        return {
-          search: state.search,
-        };
-      };
     },
   },
 });

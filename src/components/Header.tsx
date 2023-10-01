@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import HeaderBadge from "./HraderBadge";
 
 const Header = () =>{
-  
 
     return (
         <header className="App-header">
