@@ -2,25 +2,19 @@ import React  from 'react';
 import { useInfiniteQuery } from "react-query";
 import catStyle from './cat.module.css';
 import { fetchCats } from "../../api/cats";
-import { useDispatch, useSelector } from "react-redux";
 import { setSearch } from '../../store/catSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
 
 type Cat = {
-  name: string ,
+  name: string, 
   image_link: string
 }
 
-type RootState = {
-  catSlice: CatSliceState;
-};
-
-type CatSliceState = {
-  search: string;
-}
-
 function Cats() {
-  const dispatch = useDispatch();
- const search = useSelector((state : RootState) => {console.log({state}); return  state.catSlice.search});
+ 
+  const search = useAppSelector((state) => state.catSlice.search)
+  const dispatch = useAppDispatch();
+
   const {
     data: cats,
     // isLoading,
@@ -40,10 +34,6 @@ function Cats() {
       },
     }
   );
-
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
 
   if (isError) {
     return <p>Error...</p>;
