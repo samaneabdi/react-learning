@@ -10,8 +10,8 @@ const HeaderBadge = () =>{
     const navigate = useNavigate();
     const store = useContext(productStore);
     return useObserver(() => (
-      <Badge size="small" count={store.totalSelectedProducts}>
-        <ShoppingCartOutlined onClick={() => navigate("/ProductBasket")} className="btnIcon"/>
+      <Badge size="small" count={store!.totalSelectedProducts}>
+        <ShoppingCartOutlined rev={"shopCart"} onClick={() => navigate("/ProductBasket")} className="btnIcon"/>
       </Badge>
     ))
 }

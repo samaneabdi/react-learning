@@ -10,14 +10,14 @@ function ProductBasket() {
   <div className={productStyle.selected_products}>
   <h3>Selected Products</h3>
   <ul>
-    {store.selectedProducts?.map((item) => (
+    {store!.selectedProducts?.map((item) => (
       <li key={item.id}>
         {item.title} - Quantity: {item.quantity}
       </li>
     ))}
   </ul>
   <div className={productStyle.total_price}>
-    Total Price: {store.totalPrice} $
+    Total Price: {store!.totalPrice} $
   </div>
 </div>
  ))

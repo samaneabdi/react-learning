@@ -4,6 +4,7 @@ import catStyle from './cat.module.css';
 import { fetchCats } from "../../api/cats";
 import { catStore } from '../../store/catStore';
 import { useObserver } from 'mobx-react';
+import { Cat } from '../../types/catType';
 
 
 function Cats() {
@@ -13,9 +14,9 @@ function Cats() {
     data: cats,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
-    ["cats", store.search],
-    ({ pageParam = 0}) => fetchCats(store.search, pageParam),
+  } = useInfiniteQuery<Cat[]>(
+    ["cats", store!.search],
+    ({ pageParam = 0}) => fetchCats(store!.search, pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
         const expectedPageSize = allPages[0].length;
@@ -34,8 +35,8 @@ return useObserver(()=>(
       <label htmlFor="search">Search:</label>
       <input
         type="search"
-        value={store.search}
-        onChange={(e) =>store.setSearch(e.target.value)}
+        value={store!.search}
+        onChange={(e) =>store!.setSearch(e.target.value)}
         id="search"
       />
       <br />
