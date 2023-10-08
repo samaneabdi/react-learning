@@ -31,6 +31,7 @@ function Cats() {
           />
           <br />
         </div>
+        <div>salam</div>
       </div>
       <div className={catStyle.row}>
         {cats?.map((cat) => (
